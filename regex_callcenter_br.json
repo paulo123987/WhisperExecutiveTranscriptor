@@ -1,0 +1,137 @@
+{
+  "atendente": {
+    "universal": [
+      "\\b[Bb]om\\s+(dia|tarde|noite)\\b",
+      "\\b[Cc]omo\\s+(posso|poderia|podemos)\\s+ajudar\\b",
+      "\\b[Ee]m\\s+que\\s+posso\\s+ajudar\\b",
+      "\\b[Ss]eu\\s+(nome|CPF|telefone|endereço|cadastro)\\b",
+      "\\b[Aa]guarde\\s+(um\\s+momento|na\\s+linha|por\\s+favor)\\b",
+      "\\b[Aa]gradeço\\s+(pela|por)\\s+ligação\\b",
+      "\\b[Qq]ual\\s+(o\\s+motivo|sua\\s+dúvida|problema)\\b",
+      "\\b[Pp]osso\\s+confirmar\\s+(seu|o)\\s+(nome|CPF|telefone)\\b",
+      "\\b[Vv]ou\\s+transferir\\s+para\\s+(o\\s+setor|um\\s+supervisor)\\b",
+      "\\b[Aa]notado\\b",
+      "\\b[Vv]erificando\\s+aqui\\b",
+      "\\b[Cc]onfirma\\s+para\\s+mim\\b",
+      "\\b[Ee]ntendido\\b",
+      "\\b[Pp]erfeito\\b",
+      "\\b[Vv]ou\\s+gerar\\s+o\\s+protocolo\\b",
+      "\\b[Pp]rotocolo\\s+\\d+\\b",
+      "\\b[Vv]ocê\\s+está\\s+em\\s+\\w+\\s+com\\b",
+      "\\b[Ss]istema\\s+\\w+\\b",
+      "\\b[Ss]enhor(a)?\\b",
+      "\\b[Pp]ois\\s+não\\b",
+      "\\b[Ff]ique\\s+à\\s+vontade\\b",
+      "\\b[Mm]ais\\s+alguma\\s+coisa\\s+em\\s+que\\s+posso\\s+ajudar\\b"
+    ],
+    "empresas": {
+      "nubank": [
+        "\\b[Nn]u\\s*[.,]?\\s*[Bb]om\\s+dia\\b",
+        "\\b[Nn]u\\s*[.,]?\\s+ao\\s+seu\\s+lado\\b",
+        "\\b[Rr]oxinho\\b",
+        "\\b[Vv]ocê\\s+fala\\s+com\\s+o\\s+[Rr]oxinho\\b",
+        "\\b[Nn]ubank\\b",
+        "\\b[Cc]artão\\s+Nubank\\b"
+      ],
+      "vivo": [
+        "\\b[Vv]ivo\\s+ao\\s+seu\\s+lado\\b",
+        "\\b[Vv]ivo\\s+Fibra\\b",
+        "\\b[Vv]ivo\\s+Easy\\b",
+        "\\b[Mm]inha\\s+Vivo\\b"
+      ],
+      "claro": [
+        "\\b[Cc]laro\\s+\\w+\\s+ao\\s+seu\\s+lado\\b",
+        "\\b[Cc]laro\\s+TV\\b",
+        "\\b[Mm]inha\\s+Claro\\b"
+      ],
+      "tim": [
+        "\\b[Tt]im\\s+ao\\s+seu\\s+lado\\b",
+        "\\b[Tt]im\\s+Black\\b",
+        "\\b[Tt]im\\s+Controle\\b"
+      ]
+    }
+  },
+  "cliente": {
+    "nordeste": [
+      "\\b[Ôôo]xe\\b",
+      "\\b[Vv]isse[\\?]?\\b",
+      "\\b[Mm]eu\\s+rei\\b",
+      "\\b[Aa]rretado\\b",
+      "\\b[Oo]xente\\b",
+      "\\b[Ee]ita\\b",
+      "\\b[Mm]acho\\b",
+      "\\b[Mm]e\\s+ajuda\\s+aí\\b",
+      "\\b[Nn]ão\\s+tem\\s+jeito\\b",
+      "\\b[Vv]ai\\s+dar\\s+certo\\b",
+      "\\b[Mm]e\\s+resolve\\s+logo\\b",
+      "\\b[Tt]á\\s+ruim\\b",
+      "\\b[Nn]ão\\s+presta\\b",
+      "\\b[Mm]e\\s+atende\\s+direito\\b"
+    ],
+    "sul": [
+      "\\b[Bb]ah\\b",
+      "\\b[Tt]ch[êeê]\\b",
+      "\\b[Gg]uri[ao]?\\b",
+      "\\b[Gg]uria\\b",
+      "\\b[Tt]ri\\b",
+      "\\b[Tt]ri\\s+bom\\b",
+      "\\b[Tt]á\\b",
+      "\\b[Mm]e\\s+ajuda\\s+aí\\b",
+      "\\b[Nn]ão\\s+tá\\s+funcionando\\b",
+      "\\b[Qq]uero\\s+cancelar\\b",
+      "\\b[Vv]ou\\s+mudar\\s+de\\s+operadora\\b",
+      "\\b[Pp]aga\\s+pra\\s+ver\\b",
+      "\\b[Cc]apaz\\b"
+    ],
+    "sudeste_informal": [
+      "\\b[Mm]ano\\b",
+      "\\b[Cc]ara\\b",
+      "\\b[Vv]éi\\b",
+      "\\b[Pp]arça\\b",
+      "\\b[Bb]lz\\b",
+      "\\b[Tt]á\\s+os\\s+parada\\b",
+      "\\b[Nn]ão\\s+rola\\b",
+      "\\b[Tt]ô\\s+put[ao]\\b",
+      "\\b[Nn]a\\s+moral\\b",
+      "\\b[Vv]ou\\s+cancelar\\s+tudo\\b",
+      "\\b[Mm]e\\s+resolve\\s+logo\\b"
+    ],
+    "problemas_tecnicos": [
+      "\\b[Nn]ão\\s+funciona\\b",
+      "\\b[Nn]ão\\s+abre\\b",
+      "\\b[Nn]ão\\s+carrega\\b",
+      "\\b[Ll]ento\\b",
+      "\\b[Cc]ai\\s+toda\\s+hora\\b",
+      "\\b[Ss]em\\s+sinal\\b",
+      "\\b[Nn]ão\\s+pega\\b",
+      "\\b[Ff]ica\\s+caindo\\b",
+      "\\b[Nn]ão\\s+conecta\\b",
+      "\\b[Ww]ifi\\s+nã?o\\s+funciona\\b",
+      "\\b[Ff]ora\\s+do\\s+ar\\b",
+      "\\b[Tt]ravando\\b",
+      "\\b[Bb]ugad[ao]\\b"
+    ],
+    "intencao_forte": [
+      "\\b[Qq]uero\\s+cancelar\\b",
+      "\\b[Qq]uero\\s+encerrar\\b",
+      "\\b[Vv]ou\\s+mudar\\s+de\\s+operadora\\b",
+      "\\b[Qq]uero\\s+falar\\s+com\\s+gerente\\b",
+      "\\b[Qq]uero\\s+reclamar\\b",
+      "\\b[Vv]ou\\s+processar\\b",
+      "\\b[Vv]ou\\s+pro\\s+Procon\\b",
+      "\\b[Nn]ão\\s+quero\\s+mais\\b",
+      "\\b[Cc]ancela\\s+agora\\b",
+      "\\b[Vv]ou\\s+encerrar\\s+essa\\s+conta\\b"
+    ],
+    "identidade": [
+      "\\b[Mm]eu\\s+nome\\s+(é|serei|é\\s+o)\\b",
+      "\\b[Mm]e\\s+chamo\\s+\\w+\\b",
+      "\\b[Ee]u\\s+sou\\s+o[ao]?\\b",
+      "\\b[Aa]qui\\s+é\\s+o[ao]?\\b",
+      "\\b[Qq]uem\\s+fala\\s+é\\s+o[ao]?\\b",
+      "\\b[Mm]eu\\s+CPF\\s+é\\b",
+      "\\b[Mm]eu\\s+telefone\\s+é\\b"
+    ]
+  }
+}
+

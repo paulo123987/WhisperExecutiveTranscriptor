@@ -127,13 +127,7 @@ HF_TOKEN       = "hf_..."
 - Seleciona uma pasta local e processa todos os `.wav`/`.mp3`
 - Ideal para uso com a pasta `samples/` populada via HuggingFace
 
-### Tab 3 — 🌐 Dataset HuggingFace
-- Download automático de amostras do dataset call center multilíngue
-- Dataset: [`AxonData/multilingual-call-center-speech-dataset`](https://huggingface.co/datasets/AxonData/multilingual-call-center-speech-dataset)
-- Filtro por idioma (foco: **Português do Brasil**)
-- Salva automaticamente em `samples/` para uso imediato
-
-### Tab 4 — 📊 Dashboard & Métricas
+### Tab 3 — 📊 Dashboard & Métricas
 
 | Métrica | Descrição |
 |---|---|
@@ -146,7 +140,7 @@ HF_TOKEN       = "hf_..."
 | **Duração** | Tempo total do áudio em segundos |
 | **Região** | Nordeste / Sul / Sudeste detectado por expressões regionais |
 
-### Tab 5 — 🧠 Análise IA & Insights
+### Tab 4 — 🧠 Análise IA & Insights
 
 - **Extração de insights** por LLM (OpenAI ou Groq):
   - Motivo da ligação
@@ -157,21 +151,6 @@ HF_TOKEN       = "hf_..."
   - Keywords
 - **RAG Coletivo** — TOP motivos de todas as transcrições em cache
 - **Prompt personalizado** — faça perguntas sobre o conjunto de transcrições
-
----
-
-## 🌐 Download de Amostras — CLI
-
-```bash
-# Baixar 5 amostras em português (padrão)
-python gerar_amostra_dataset_callcenter.py
-
-# Customizado
-python gerar_amostra_dataset_callcenter.py --samples 10 --lang Portuguese Spanish --output samples
-
-# Com token HuggingFace
-python gerar_amostra_dataset_callcenter.py --samples 5 --token hf_...
-```
 
 ---
 

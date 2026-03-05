@@ -30,6 +30,10 @@ jiwer>=3.0.3
 tqdm>=4.66.0
 ffmpeg-python>=0.2.0
 
+# ── Oracle Database (opcional) ─────────────────────────────────────────────────
+# Driver oficial Oracle para Python (modo Thin — não requer Oracle Client)
+oracledb>=2.3.0
+
 # ── Dependências opcionais para aceleração GPU ─────────────────────────────────
 # Instale manualmente conforme sua versão CUDA:
 # pip install torch torchaudio --index-url https://download.pytorch.org/whl/cu121

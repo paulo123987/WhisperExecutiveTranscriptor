@@ -241,9 +241,12 @@ def _get_secret(key: str, default: str = "") -> str:
         return default
 
 
-OPENAI_KEY  = _get_secret("OPENAI_API_KEY")
-GROQ_KEY    = _get_secret("GROQ_API_KEY")
-HF_TOKEN    = _get_secret("HF_TOKEN")
+OPENAI_KEY   = _get_secret("OPENAI_API_KEY")
+GROQ_KEY     = _get_secret("GROQ_API_KEY")
+HF_TOKEN     = _get_secret("HF_TOKEN")
+ORACLE_USER  = _get_secret("ORACLE_USER")
+ORACLE_PASS  = _get_secret("ORACLE_PASSWORD")
+ORACLE_DSN   = _get_secret("ORACLE_DSN")
 
 # ═══════════════════════════════════════════════════════════════════════════════
 #  SESSION STATE
@@ -354,7 +357,23 @@ with st.sidebar:
 
     st.divider()
 
-    # Status GPU
+    # ── Oracle DB (para aba Consulta Oracle) ──
+    with st.expander("🗄️ Conexão Oracle (opcional)"):
+        oracle_user_input = st.text_input(
+            "Usuário", value=ORACLE_USER, placeholder="oracle_user",
+            key="oracle_user",
+        )
+        oracle_pass_input = st.text_input(
+            "Senha", type="password", value=ORACLE_PASS, placeholder="••••••",
+            key="oracle_pass",
+        )
+        oracle_dsn_input = st.text_input(
+            "DSN", value=ORACLE_DSN, placeholder="host:1521/ORCL",
+            help="Formato: host:porta/service_name  ou  TNS alias",
+            key="oracle_dsn",
+        )
+
+    st.divider()
     try:
         import torch
         gpu_ok = torch.cuda.is_available()
@@ -442,6 +461,7 @@ tabs = st.tabs([
     "📂 Processamento em Lote",
     "📊 Dashboard & Métricas",
     "🧠 Análise IA & Insights",
+    "🗄️ Consulta Oracle",
 ])
 
 
@@ -1048,6 +1068,165 @@ with tabs[3]:
 
                     except Exception as e:
                         st.error(f"Erro na consulta: {e}")
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+#  TAB 5 — CONSULTA ORACLE (Amostragem Estatística)
+# ═══════════════════════════════════════════════════════════════════════════════
+with tabs[4]:
+    st.markdown("### 🗄️ Consulta Oracle — Amostragem Estatística Mensal")
+    st.caption(
+        "Gera (e executa, se conectado) uma query Oracle que retorna **N registros "
+        "únicos por CAMPO1**, selecionados aleatoriamente, para um mês específico."
+    )
+
+    from src.db_oracle import build_sample_query, connect_oracle, run_sample_query
+
+    col_q1, col_q2 = st.columns([1, 1], gap="large")
+
+    with col_q1:
+        st.markdown("#### ⚙️ Parâmetros da Consulta")
+
+        # Mês de referência
+        default_month = datetime.now().strftime("%Y-%m")
+        ano_mes_input = st.text_input(
+            "Mês de Referência (AAAA-MM)",
+            value=default_month,
+            placeholder="2024-03",
+            help="Período a ser amostrado. Formato: Ano-Mês (ex.: 2024-03).",
+        )
+
+        # Tabela
+        tabela_input = st.text_input(
+            "Nome da Tabela",
+            value="TABELA",
+            help="Nome da tabela Oracle que contém os registros de transcrição.",
+        )
+
+        # CAMPO1
+        campos_input = st.text_area(
+            "Valores de CAMPO1 (um por linha)",
+            value="123\n1234",
+            height=100,
+            help="Filtra apenas esses valores de CAMPO1. Coloque um valor por linha.",
+        )
+        campos_list = [c.strip() for c in campos_input.splitlines() if c.strip()]
+
+        # Tamanho da amostra
+        n_amostras = st.number_input(
+            "Tamanho da Amostra (N)",
+            min_value=1,
+            max_value=100_000,
+            value=6000,
+            step=1000,
+            help=(
+                "Quantidade máxima de registros únicos por CAMPO1 a retornar. "
+                "Para uma amostra estatisticamente válida de uma população "
+                "grande, 6000 registros oferecem margem de erro < 1,3% com "
+                "nível de confiança de 95%."
+            ),
+        )
+
+    with col_q2:
+        st.markdown("#### 📐 SQL Gerado")
+
+        try:
+            sql_preview = build_sample_query(
+                ano_mes=ano_mes_input,
+                campos=campos_list,
+                tabela=tabela_input,
+                n_amostras=n_amostras,
+            )
+            st.code(sql_preview, language="sql")
+
+            # Botão de cópia (via download)
+            st.download_button(
+                "⬇️ Baixar SQL (.sql)",
+                data=sql_preview.encode("utf-8"),
+                file_name=f"amostra_{tabela_input}_{ano_mes_input}.sql",
+                mime="text/plain",
+                use_container_width=True,
+            )
+        except ValueError as ve:
+            st.error(f"❌ Parâmetro inválido: {ve}")
+            sql_preview = None
+
+    # ── Estatísticas da Amostra ──────────────────────────────────────────────
+    st.divider()
+    st.markdown("#### 📊 Dimensionamento da Amostra")
+    col_s1, col_s2, col_s3, col_s4 = st.columns(4)
+
+    import math
+
+    # Margem de erro com nível de confiança 95% (z=1.96), população infinita
+    if n_amostras > 0:
+        margem_erro = (1.96 / math.sqrt(n_amostras)) * 100
+    else:
+        margem_erro = 0.0
+
+    col_s1.metric("Registros Solicitados", f"{n_amostras:,}")
+    col_s2.metric("Nível de Confiança", "95%")
+    col_s3.metric("Margem de Erro (máx.)", f"±{margem_erro:.2f}%")
+    col_s4.metric("Período", ano_mes_input if ano_mes_input else "—")
+
+    st.caption(
+        "📌 **Nota metodológica:** A margem de erro foi calculada assumindo proporção "
+        "p=0,5 (caso mais conservador) e distribuição normal com z=1,96 (95% confiança). "
+        "Com N=6000 a margem é ≈±1,27%, adequada para análises de call center em produção."
+    )
+
+    # ── Execução no Banco ────────────────────────────────────────────────────
+    st.divider()
+    st.markdown("#### 🔌 Executar no Banco Oracle")
+
+    eff_oracle_user = oracle_user_input or ORACLE_USER
+    eff_oracle_pass = oracle_pass_input or ORACLE_PASS
+    eff_oracle_dsn  = oracle_dsn_input  or ORACLE_DSN
+
+    db_ready = bool(eff_oracle_user and eff_oracle_pass and eff_oracle_dsn)
+    if not db_ready:
+        st.info(
+            "Configure **Usuário**, **Senha** e **DSN** Oracle no painel lateral "
+            "(expanda a seção 🗄️ Conexão Oracle) para habilitar a execução."
+        )
+
+    run_btn = st.button(
+        "▶️ Executar Consulta no Oracle",
+        use_container_width=True,
+        disabled=(not db_ready or sql_preview is None),
+    )
+
+    if run_btn and sql_preview is not None:
+        with st.spinner("Conectando ao Oracle e executando query…"):
+            try:
+                conn = connect_oracle(
+                    user=eff_oracle_user,
+                    password=eff_oracle_pass,
+                    dsn=eff_oracle_dsn,
+                )
+                df_result = run_sample_query(
+                    conn=conn,
+                    ano_mes=ano_mes_input,
+                    campos=campos_list,
+                    tabela=tabela_input,
+                    n_amostras=n_amostras,
+                )
+                conn.close()
+
+                st.success(f"✅ Consulta executada — {len(df_result):,} registros retornados.")
+                st.dataframe(df_result, use_container_width=True)
+
+                # Download CSV
+                csv_bytes = df_result.to_csv(index=False).encode("utf-8")
+                st.download_button(
+                    "⬇️ Baixar resultado (.csv)",
+                    data=csv_bytes,
+                    file_name=f"amostra_{tabela_input}_{ano_mes_input}.csv",
+                    mime="text/csv",
+                    use_container_width=True,
+                )
+            except Exception as exc:
+                st.error(f"❌ Erro ao executar no Oracle: {exc}")
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
